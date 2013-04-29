@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -15,6 +16,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import com.dhbw.Zombiz.gameEngine.logic.Runtime;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
@@ -25,6 +27,10 @@ public class Menu {
 
 
 
+    	KeyListener[] keyListeners = frame.getKeyListeners();
+		for(int cnt = 0; cnt < keyListeners.length; cnt++){
+			frame.removeKeyListener(keyListeners[cnt]);
+		}
 
         BufferedImage backgroundImage = null;
         /*BufferedImage startGameImage = null; 
@@ -84,12 +90,15 @@ public class Menu {
         JLabel exitGamelabel4 = new JLabel();
         exitGamelabel4.setBounds(316, 290, 33, 19);
 
-
+        
+        
         startGamelabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent me) {
                 System.out.println("you started a new game ");
                 Runtime r = new Runtime(true, frame);
+                Video v = new Video(frame);
+               
             }
         });
         startGamelabel2.addMouseListener(new MouseAdapter() {
@@ -97,6 +106,8 @@ public class Menu {
             public void mouseClicked(MouseEvent me) {
                 System.out.println("you started a new game ");
                 Runtime r = new Runtime(true, frame);
+                Video v = new Video(frame);
+
             }
         });
         startGamelabel3.addMouseListener(new MouseAdapter() {
@@ -104,6 +115,8 @@ public class Menu {
             public void mouseClicked(MouseEvent me) {
                 System.out.println("you started a new game ");
                 Runtime r = new Runtime(true, frame);
+                Video v = new Video(frame);
+
             }
         });
         loadGamelabel.addMouseListener(new MouseAdapter() {

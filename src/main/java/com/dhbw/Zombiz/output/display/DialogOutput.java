@@ -1,6 +1,10 @@
 package com.dhbw.Zombiz.output.display;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -20,10 +24,11 @@ import com.dhbw.Zombiz.gameEngine.logic.Actor;
 import com.dhbw.Zombiz.gameEngine.logic.BuildRoom;
 import com.dhbw.Zombiz.gameEngine.logic.Conversation;
 import com.dhbw.Zombiz.gameEngine.logic.DialogEntry;
+import com.dhbw.Zombiz.gameEngine.logic.Runtime;
 
 
 
-public class DialogOutput {
+public class DialogOutput  {
 
 	
 	public int nextDeId;
@@ -40,9 +45,23 @@ public class DialogOutput {
 	public int roomId;
 	
 	public boolean isGroup;
+	public KeyAdapter keyListener;
 	
 	
 	
+	
+	
+	
+	public KeyListener getKeyListener() {
+		return keyListener;
+	}
+
+
+	public void setKeyListener(KeyAdapter keyListener) {
+		this.keyListener = keyListener;
+	}
+
+
 	public boolean isGroup() {
 		return isGroup;
 	}
@@ -267,7 +286,7 @@ public class DialogOutput {
 			}
 			
 			//to keep tab of which dialog entry is displayed
-			com.dhbw.Zombiz.gameEngine.logic.Runtime.checkDialog(nextId, conv.getConversationId());
+			Runtime.checkDialog(nextId, conv.getConversationId());
 			setNextDeId(nextId);
 		}
 		
@@ -324,8 +343,8 @@ public class DialogOutput {
 		}
 		else
 			addClickableFunction(frame, 600, 500, 166, 84, "nextDialogEntry");
-		
-		
+			addKeyListenerFunction(frame);
+			frame.addKeyListener(getKeyListener());
 		
 		frame.add(label);
 		frame.repaint();
@@ -343,18 +362,36 @@ public class DialogOutput {
 				
 			if(type.equalsIgnoreCase("nextDialogEntry")){	
 				
+				
+				
 				if(getNextDeId() <=getMaxDeSize()-1){
+					
+				
 				frame.getContentPane().removeAll();
 				JTextArea dialog =  getDialogEntry(frame, getConv(), actors, false);
 				frame.add(dialog);
 				frame.repaint(); 
 				setDialogBackground(frame, backgroundImage);
+				frame.removeKeyListener(keyListener);
 				}
-				else {
+				else{
+					
+					KeyListener[] keyl = frame.getKeyListeners();
+					for(int cnt = 0; cnt <keyl.length; cnt++){
+						System.out.println("No "+cnt);
+						frame.removeKeyListener(keyl[cnt]);
+					}
+				
+					
+					
+					frame.removeKeyListener(keyListener); 
 					BuildRoom r = new BuildRoom(getRoomId(), frame);
-                                        System.out.println("I built room "+getRoomId());
+					//System.out.println("I built room "+getRoomId());
+                                       
+                    }
+                                        
 				}
-			}
+			
 			
 			if(type.equalsIgnoreCase("option:1")){
 				setNextDeId(getOptionOne());
@@ -393,6 +430,38 @@ public class DialogOutput {
 		frame.add(label);
 		
 	}
+	
+	
+	public void addKeyListenerFunction(final JFrame frame){
+		
+		
+		
+		keyListener = new KeyAdapter()
+		{
+		  public void keyPressed(KeyEvent e)
+		  {
+			// Char Space 32, Char Enter 10
+			if(e.getKeyCode() == 10 || e.getKeyCode() == 32){
+			  if(getNextDeId() <=getMaxDeSize()-1){
+					frame.getContentPane().removeAll();
+					JTextArea dialog =  getDialogEntry(frame, getConv(), actors, false);
+					frame.add(dialog);
+					frame.repaint(); 
+					setDialogBackground(frame, backgroundImage);
+					frame.removeKeyListener(keyListener);
+					}
+					else{
+						KeyListener[] keyl = frame.getKeyListeners();
+						for(int cnt = 0; cnt <keyl.length; cnt++){
+							frame.removeKeyListener(keyl[cnt]);
+						} 
+						BuildRoom r = new BuildRoom(getRoomId(), frame);
+					}
+			}};
+		};
+		}
+		 
+	
 	
 	
 }

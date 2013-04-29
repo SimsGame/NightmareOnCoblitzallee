@@ -22,6 +22,9 @@
 package com.dhbw.Zombiz.gameEngine.logic;
 
 import com.dhbw.Zombiz.output.display.DialogOutput;
+import com.dhbw.Zombiz.output.display.Video;
+
+import java.awt.event.KeyListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -48,19 +51,23 @@ public class Runtime{
 	//Runtime Variables
 
 	private static List <Item> inventory = new ArrayList<Item>();	//List of Items the play have
-        private static List <Item> remItems = new ArrayList<Item> () ;
+    private static List <Item> remItems = new ArrayList<Item> () ;
 	private static List <Actor> metActors = null;		//List of already meet Actors
 	private static List <Room> enterdRooms = null;		//List of already entered Rooms
 	private static List <Room> enterableRooms = null;	//List of Rooms the player is able to enter
 	private static int enterdRoomCounter = 0;		//Counter of how many Rooms have been entered
 	private static int gameState = 0;                       //Monitores the flowcontrol
 	public static int currRoomId = 5 ;					//Gives the current Room ID, mainuse for save and starting a new Game
-        private static boolean firstConv = true;
-        public static int conditionCounter = 0;
-        public static boolean dontDraw = false;
-        public static boolean receiveYes=false;
-        public static boolean profNotMet=true;
-        public static int chosenRoom=0;
+    private static boolean firstConv = true;
+    public static int conditionCounter = 0;
+    public static boolean dontDraw = false;
+    public static boolean receiveYes=false;
+    public static boolean profNotMet=true;
+    public static int chosenRoom=0;
+    
+    public static boolean videoOver;
+    
+    
 	/** Constructor for a new Game
 	 * 
 	 * @param newGame 1 for a new game; 0 for load game
@@ -74,7 +81,11 @@ public class Runtime{
 		}else{
 			loadGame();
 		}
-		BuildRoom br = new BuildRoom(currRoomId, frame);
+		
+		
+		BuildRoom r = new BuildRoom(currRoomId, frame);
+		
+		
 	}
 	
 	

@@ -28,5 +28,14 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/janbrodhaecker/.m2/repository/javax/media/jmf/2.1.1e/jmf-2.1.1e.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="javax.media"/>
+			<attribute name="maven.artifactId" value="jmf"/>
+			<attribute name="maven.version" value="2.1.1e"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

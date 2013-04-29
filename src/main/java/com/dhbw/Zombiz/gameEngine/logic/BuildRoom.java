@@ -3,6 +3,9 @@ package com.dhbw.Zombiz.gameEngine.logic;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -17,10 +20,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import org.omg.CORBA.FREE_MEM;
+
 import com.dhbw.Zombiz.gameEngine.logic.Runtime;
 
 import com.dhbw.Zombiz.gameEngine.parser.XmlParser;
 import com.dhbw.Zombiz.output.display.DialogOutput;
+import com.dhbw.Zombiz.output.display.ItemInspect;
 
 public class BuildRoom {
 
@@ -42,8 +49,9 @@ public class BuildRoom {
 	Item secondFocussedItem;
 
 	int menueIsOpenFlag = 0; // Is set to 1 if a RoomObjectMenu or an ItemMenu
-								// is currently open.
-
+	int inventoryIsOpenFlag = 0;
+	int inGameMenueIsOpenFlag = 0;
+	
 	static int cnt = 0;
 
 	Item roomObj;
@@ -195,7 +203,10 @@ public class BuildRoom {
 	}
 
 	public BuildRoom(int roomId, JFrame frame) {
-
+		deleteExistingKeyListeners(frame);
+		
+		
+		
 		XmlParser p = new XmlParser("src/main/resources/XML/chapter1.xml");
 
 		setRoomId(roomId);
@@ -219,6 +230,7 @@ public class BuildRoom {
 		deleteFrame(frame);
 		frame.repaint();
 
+		
 		setFrame(frame);
 		// setBackground Image
 
@@ -230,6 +242,52 @@ public class BuildRoom {
 		drawInventoryBag(frame);
 		drawActors(frame);
 		frame.add(label);
+		
+		addKeyListeners(frame);
+		
+	}
+
+	private void deleteExistingKeyListeners(JFrame frame) {
+		KeyListener[] keyListeners = frame.getKeyListeners();
+		for(int cnt = 0; cnt < keyListeners.length; cnt++){
+			frame.removeKeyListener(keyListeners[cnt]);
+		}
+		
+	}
+
+	private void addKeyListeners(final JFrame frame) {
+		KeyAdapter keyListener = new KeyAdapter(){
+
+			
+			public void keyPressed(KeyEvent e) {
+				System.out.println("Pressed "+e.getKeyCode());
+				
+				// Char = i 73, MacBookProMid2010
+				if((e.getKeyCode() == 73) && (inventoryIsOpenFlag == 0)){
+					drawInventory(frame);
+					inventoryIsOpenFlag = 1;
+					System.out.println("draw inv");
+				}
+				// Char = esc 27
+				/*if((e.getKeyCode() == 27) && (inGameMenueIsOpenFlag == 0)){
+					System.out.println("In GameMenü");
+					inGameMenueIsOpenFlag = 1;
+				} */
+				
+				if((e.getKeyCode() == 27) && (menueIsOpenFlag == 1)){
+					refreshFrame(frame);
+					menueIsOpenFlag = 0;
+				}
+				
+				
+				
+				
+			}
+
+			
+		};
+		frame.addKeyListener(keyListener);
+		
 	}
 
 	public void drawActors(JFrame frame) {
@@ -384,11 +442,13 @@ public class BuildRoom {
 					if (type.equalsIgnoreCase("inventory")) {
 						System.out.println("You pressed the Inventory");
 						drawInventory(frame);
+						inventoryIsOpenFlag = 1;
 						frame.repaint();
 					}
 					if (type.equalsIgnoreCase("inventory:close")) {
 						System.out.println("You closed the inventory !!!");
 						refreshFrame(frame);
+						inventoryIsOpenFlag = 0;
 						setItemsFocussedInInventory(0);
 					}
 					if (type.equalsIgnoreCase("inventory:next")) {
@@ -459,6 +519,7 @@ public class BuildRoom {
 
 					if (type.equalsIgnoreCase("inGameMenue")) {
 						System.out.println("InGameMenue");
+						inGameMenueIsOpenFlag = 1;
 					}
 					
 					if (type.equalsIgnoreCase("actor")) {
@@ -515,6 +576,8 @@ public class BuildRoom {
 								autoItem));
 					}
 					System.out.println("inspect item ..." + itemId);
+					refreshFrame(frame);
+					ItemInspect inspect = new ItemInspect(frame, getBackgroundImage(), getItemById(getItems(),itemId), getRoomId());
 				}
 				if (type.equalsIgnoreCase("leave:item")) {
 					refreshFrame(frame);
@@ -563,6 +626,9 @@ public class BuildRoom {
 								autoItem));
 					}
 					System.out.println("inspect roomObject ..." + itemId);
+					refreshFrame(frame);
+					ItemInspect inspect = new ItemInspect(frame, getBackgroundImage(), getItemById(getRoomObjects(),itemId), getRoomId());
+
 				}
 
 				if (type.equalsIgnoreCase("item:RoomObjMenue")) {

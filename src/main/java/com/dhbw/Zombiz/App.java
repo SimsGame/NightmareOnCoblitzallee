@@ -35,6 +35,8 @@ import java.awt.Graphics2D;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -72,7 +74,7 @@ import com.dhbw.Zombiz.gameEngine.logic.Runtime;
 import com.dhbw.Zombiz.gameEngine.logic.Room;
 import com.dhbw.Zombiz.gameEngine.parser.XmlParser;
 import com.dhbw.Zombiz.output.audio.*;
-import com.dhbw.Zombiz.output.display.Menu;
+import com.dhbw.Zombiz.output.display.*;
 
 /**
  * Starts the Main Game
@@ -90,20 +92,14 @@ public class App
     	
     	frame.setSize(800,600);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-                frame.setResizable(false);
-		
-               
-        		
-		Runtime r = new Runtime(true,frame);
-		
-		Menu menu = new Menu(frame);
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+        Menu menu = new Menu(frame);
+        frame.setVisible(true);
+    	
+    	
 		
 
-		frame.setVisible(true);
-    	
-    	
-		
-    	
     
 
 		
