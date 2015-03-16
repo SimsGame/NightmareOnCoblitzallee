@@ -12,6 +12,7 @@ Thumbs.db
 # Specific things #
 .classpath
 .settings
+/target/
 
 # Save games #
 .sav
