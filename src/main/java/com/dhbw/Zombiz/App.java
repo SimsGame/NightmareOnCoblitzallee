@@ -13,11 +13,6 @@
  *
  *Project: Zombiz
  *Package: com.dhbw.zombiz
- *
- * 
- *Contributors:
- * -Christoph Schabert
-
  ********************************************************************************/
 
 package com.dhbw.Zombiz;
@@ -78,9 +73,9 @@ import com.dhbw.Zombiz.output.display.*;
 
 /**
  * Starts the Main Game
+ * - creates Frame, which is given to all the other Classes. 
  * 
- * at this State only for test purpose
- *
+ * @author Jan Brodhaecker 
  */
 @SuppressWarnings("unused")
 public class App 
@@ -90,13 +85,17 @@ public class App
     {
     	
     	
+    	
+    	SoundPlayer.createSound();
+    	
     	frame.setSize(800,600);
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    	frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        Menu menu = new Menu(frame);
-        frame.setVisible(true);
-    	
+        Menu menu = new Menu(frame, true);
+        
+        SoundPlayer.ts.run();
+    	frame.setVisible(true);
     	
 		
 

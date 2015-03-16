@@ -1,7 +1,19 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+/*******************************************************************************
+ * Copyright (c) 2013 DHBW.
+ * This source is subject to the DHBW Permissive License.
+ * Please see the License.txt file for more information.
+ * All other rights reserved.
+ * 
+ * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY 
+ * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ * 
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ *Project: Zombiz
+ *Package: com.dhbw.zombiz
+ ********************************************************************************/
 package com.dhbw.Zombiz.output.display;
 
 import com.dhbw.Zombiz.gameEngine.logic.BuildRoom;
@@ -13,8 +25,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
+ * Shows credits, can be called from the main menue
  *
- * @author Stazzer
+ * @author Jannik Pachal
  */
 public class Credits{
         
@@ -72,13 +85,13 @@ public class Credits{
                     + "<BR\\><BR\\><BR\\><BR\\>"
                     + "<DIV style=\"text-align: center; color: #FFFFFF; font-size: 16px; text-decoration: underline;\">Lead Programmer</DIV>"
                     + "<BR\\>"
-                    + "<DIV style=\"font-size: 11px; text-align: center;\">Jan Brodhäcker</DIV>"
+                    + "<DIV style=\"font-size: 11px; text-align: center;\">Jan Brodh‰cker</DIV>"
                     + "<BR\\><BR\\><BR\\><BR\\>"
                     + "<DIV style=\"text-align: center; color: #FFFFFF; font-size: 16px; text-decoration: underline;\">Story</DIV>"
                     + "<BR\\>"
                     + "<DIV style=\"font-size: 11px; text-align: center;\">Kira Schomber<BR\\>Georg Rose<BR\\>Jannik Pachal</DIV>"
                     + "<BR\\><BR\\><BR\\><BR\\>"
-                    + "<DIV style=\"text-align: center; color: #FFFFFF; font-size: 16px; text-decoration: underline;\">Rätsel</DIV>"
+                    + "<DIV style=\"text-align: center; color: #FFFFFF; font-size: 16px; text-decoration: underline;\">R‰tsel</DIV>"
                     + "<BR\\>"
                     + "<DIV style=\"font-size: 11px; text-align: center;\">Georg Rose<BR\\>Jannik Pachal</DIV>"
                     + "<BR\\><BR\\><BR\\><BR\\>"
@@ -104,7 +117,6 @@ public class Credits{
                     + "<BR\\><BR\\><BR\\><BR\\>"
                     + "<DIV style=\"text-align: center; color: #FFFFFF; font-size: 16px; text-decoration: underline;\">Special Thanks to...</DIV>"
                     + "<BR\\>"
-                    + "<DIV style=\"font-size: 11px; text-align: center;\">Christina Beisel - Die Schöpferin der Storyidee<BR\\>Sarah Brodhäcker - Deine Wohnung ist HAMMER !</DIV>"
                     + "</BODY>"
                     + "</HTML>");
             label_creditsNames.setMaximumSize(new java.awt.Dimension(2147483647, 1500));

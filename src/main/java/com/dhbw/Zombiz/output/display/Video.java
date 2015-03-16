@@ -1,59 +1,77 @@
+/*******************************************************************************
+ * Copyright (c) 2013 DHBW.
+ * This source is subject to the DHBW Permissive License.
+ * Please see the License.txt file for more information.
+ * All other rights reserved.
+ * 
+ * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY 
+ * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ * 
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ *Project: Zombiz
+ *Package: com.dhbw.zombiz
+ ********************************************************************************/
 package com.dhbw.Zombiz.output.display;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Frame;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
+
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
-
-
-import javax.media.CannotRealizeException;
-import javax.media.Manager;
-import javax.media.NoPlayerException;
-import javax.media.Player;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.WindowConstants;
-
-import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
 
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.MediaPlayer;
-import uk.co.caprica.vlcj.player.MediaPlayerEventListener;
-import uk.co.caprica.vlcj.player.MediaPlayerFactory;
 import uk.co.caprica.vlcj.player.embedded.FullScreenStrategy;
 import uk.co.caprica.vlcj.player.embedded.x.XFullScreenStrategy;
+import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
-import com.dhbw.Zombiz.gameEngine.logic.BuildRoom;
-import com.dhbw.Zombiz.gameEngine.logic.Runtime;
-import com.dhbw.Zombiz.logic.*;
+import com.dhbw.Zombiz.output.audio.Sound;
+import com.dhbw.Zombiz.output.audio.SoundPlayer;
+import com.sun.jna.NativeLibrary;
 
- 
+
+/**
+ * Plays the prolog Video (and should play other videos also ...)
+ * 
+ * Using the VLCj Framework to play the video in a new frame. the game frame is disabled and will be enabled after the video is finished.
+ * 
+ * 
+ * 
+ * @author Jan Brodhaecker
+ * 
+ */
 public class Video{
 
-	/**
-	 * @param args
-	 */
 	 private static final String[] ARGS = {//"-vvv",
-	        "--ignore-config",
-	        "-I dummy",
-	        "-V opengl"};
+		 "--no-plugins-cache",
+	      "--no-video-title-show",
+	      "--no-snapshot-preview",
+	      "--quiet",
+	      "--quiet-synchro",
+	      "--intf",
+	      ":no-video-title-show",
+	      "dummy"};
 	
 	public Video(final JFrame frame){
 	
-		NativeLibrary.addSearchPath("vlc", "/Applications/VLC.app/Contents/MacOS/lib");
-
+		
+		SoundPlayer.stopSound();
+		NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), System.getProperty("user.dir") + "\\lib\\");
+		System.out.println("PATH !!!! :"+ System.getProperty("user.dir") + "\\lib\\");
+		
+		
 		final JFrame videoFrame = new JFrame();
         videoFrame.setSize(800,600);
         videoFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         videoFrame.setResizable(false);
+        videoFrame.setUndecorated(true);
+        
+        
         
         videoFrame.setAlwaysOnTop(true);
         videoFrame.setLocation((frame.getLocationOnScreen()));
@@ -66,7 +84,7 @@ public class Video{
 				   }
 				 
 				   protected FullScreenStrategy onGetFullScreenStrategy() {
-				     return new XFullScreenStrategy(frame);
+				     return new XFullScreenStrategy(videoFrame);
 				   }
 				   
 				   public void videoOutputAvailable(MediaPlayer mediaPlayer, boolean videoOutput) {
@@ -76,23 +94,19 @@ public class Video{
 				   }
 				   
 				   public void finished(MediaPlayer mediaPlayer) {
-					   System.out.println("Video finished !");
+					
 					   
 					   videoFrame.dispose();
 					   frame.setVisible(true);
 					   
 					   
-				       
-				     
-				   
-				    
-				       
-				       
-				       
-				
-
 					   
-					   	
+					   Thread ts;
+					   Sound s = new Sound("Background");
+					   s.setRepeat(true);
+					   ts = new Thread(s,"Background Sound");
+					   ts.start();
+					   
 				   }
 				 };
 		    
@@ -115,9 +129,9 @@ public class Video{
 				 videoFrame.setContentPane(mediaPlayerComponent);
 				 videoFrame.setVisible(true);
 
-		    mediaPlayerComponent.getMediaPlayer().playMedia("src/main/resources/Video/prolog.mp4");
-		   
-		    
+				 mediaPlayerComponent.getMediaPlayer().playMedia("src/main/resources/Video/prolog.mp4");
+				 
+				 	
 		    
 		    
 		  /*  try {

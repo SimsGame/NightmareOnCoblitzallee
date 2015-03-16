@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (c) 2013 DHBW.
+ * This source is subject to the DHBW Permissive License.
+ * Please see the License.txt file for more information.
+ * All other rights reserved.
+ * 
+ * THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY 
+ * KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
+ * PARTICULAR PURPOSE.
+ * 
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ *Project: Zombiz
+ *Package: com.dhbw.zombiz
+ ********************************************************************************/
 package com.dhbw.Zombiz.gameEngine.parser;
 
 
@@ -15,47 +31,55 @@ import org.w3c.dom.NodeList;
 
 import com.dhbw.Zombiz.gameEngine.logic.*;
 
-
+/**
+ * Parses the XML-files. Creates list of Rooms, Items, NPCs, RoomObjects, Conversations and DialogEntries, and put all to the room, where the stuff 
+ * belongs to. 
+ * 
+ * XML-files were created with Chat-Mapper. 
+ * http://www.chat-mapper.com/
+ * 
+ * @author Jan Brodhaecker
+ * 
+ */
 public  class XmlParser {
 	String xmlFilePath ="";
 	Document xmlFile;
 	boolean debugConsole;
 	
 	List<Actor> listActors = new ArrayList<Actor>();
-	List<Item>	listRoomItems = new ArrayList<Item>();
-	List<Item>	listPickableItems = new ArrayList<Item>();
-	List<Room>	listRooms = new ArrayList<Room>(); 
-	
+	List<Item> listRoomItems = new ArrayList<Item>();
+	List<Item> listPickableItems = new ArrayList<Item>();
+        List<Item> listRemItems = new ArrayList<Item>();
+	List<Room> listRooms = new ArrayList<Room>(); 
 	List<Conversation> listConversations = new ArrayList<Conversation>();
 	
-	
 	public  XmlParser(String filePath){
+            for(int i=0; i<300; i++){
+                listActors.add(null);
+                listRooms.add(null);
+                //listConversations.add(null);
+                listPickableItems.add(null);
+                listRoomItems.add(null);
+            }
+            System.out.println("Size: "+ listActors.size());
 		setXmlFilePath(filePath);
 	    openXmlFile();
 	    
-	    
 	    getAllActors();
 	    getAllItems();
-	    getAllRooms();
-	    
-	    getAllConversations();
-	    
-	    
+	    getAllRooms(); 
+	    getAllConversations();   
 	}
 	
-	
-	
-	
 	 public Actor getActorById (int actorId){
-		 Actor actor = listActors.get(actorId-1);
+		 Actor actor = listActors.get(actorId);
 		 return actor;
 	 }
 	 
 	 public Room getRoomById (int roomId){
-		 Room room = listRooms.get(roomId-1);
-		 return room;
+                 Room room = listRooms.get(roomId);
+                 return room;
 	 }
-	 
 	 
 	 public Item getPickableItemById(int itemId){
 		 Item item = listPickableItems.get(itemId);
@@ -66,7 +90,10 @@ public  class XmlParser {
 		 Item item = listRoomItems.get(itemId);
 		 return item;
 	 }
-	 
+         
+         public List<Item> getRemItemList(){
+             return listRemItems;
+         }
 	 
 	 public Conversation getConversationById(int conversationId){
 		 Conversation conv = null;
@@ -82,10 +109,9 @@ public  class XmlParser {
 		 return this.listConversations;
 	 }
 	 
-	 
-	 
 	 public List<Item> getAllItemsByRoomId(int roomId){
 		 Room room = getRoomById(roomId);
+                 System.out.println("Blablubb: "+room.getName());
 		 String roomObjects = room.getGameObjectsIncluded();
 		 String[] values = roomObjects.split(","); 
 		 List<Item> tmpListRoomItems = new ArrayList<Item>();
@@ -96,20 +122,17 @@ public  class XmlParser {
 					String itemId = values[cntItems].substring(7,10);
 					String x = values[cntItems].substring(11,17);
 			        String y = values[cntItems].substring(18,24);
-			        
+                                 
 			        float itemLocX = Float.parseFloat(x);
 			        float itemLocY = Float.parseFloat(y);
 					
-					
-					Item item = getPickableItemById(Integer.parseInt(itemId)-1);
+					Item item = getPickableItemById(Integer.parseInt(itemId));
 					item.setItemLocX(itemLocX);
 					item.setItemLocY(itemLocY);
 					
 					tmpListRoomItems.add(item); 
-					
 				}
 			}
-			
 		 return tmpListRoomItems;
 	 }
 	 
@@ -121,7 +144,6 @@ public  class XmlParser {
 		    
 		 for(int cntItems=0; cntItems<values.length; cntItems++){
 				
-				
 				if(values[cntItems].contains("RoomObjectID")){
 					values[cntItems] = values[cntItems].trim();
 					String itemId = values[cntItems].substring(13,16);
@@ -132,7 +154,7 @@ public  class XmlParser {
 				    float itemLocY = Float.parseFloat(y);
 				    
 					
-					Item item = getRoomItemsById(Integer.parseInt(itemId)-1);
+					Item item = getRoomItemsById(Integer.parseInt(itemId));
 					item.setItemLocX(itemLocX);
 					item.setItemLocY(itemLocY);
 					
@@ -153,50 +175,29 @@ public  class XmlParser {
 					values[cntItems] = values[cntItems].trim();
 					
 					String itemId = values[cntItems].substring(6,9);
-					
-					
-					
 					String x = values[cntItems].substring(10,16);
 			        String y = values[cntItems].substring(17,23);
 			       
-			        
 			        float npcLocX = Float.parseFloat(x);
 			        float npcLocY = Float.parseFloat(y);
 					
+                                        System.out.println("Actor: "+Integer.parseInt(itemId));
 					Actor actor = getActorById(Integer.parseInt(itemId));
 					actor.setNpcLocX(npcLocX);
 					actor.setNpcLocY(npcLocY);
 					tmpListActor.add(actor);
-					
-				
-					
 				}
 			}
-		 
-		 
-		 
-		 
 		 return tmpListActor;
-		 
 	 }
-	
-	 
-	 
-	 
-	 
-	 
-	
+
 	public List<Conversation> getListConversations() {
 		return listConversations;
 	}
-
-
-
-
+        
 	public List<Actor> getListOfActors(){
 		return listActors;
 	}
-	
 	
 	public List<Room> getListOfRooms(){
 		return listRooms;
@@ -209,26 +210,18 @@ public  class XmlParser {
 	public List<Item> getRoomItems(){
 		return listRoomItems;
 	}
-	
-	
-	
-	
-	
-	
+
 	public void setDebugConsole(boolean debug){
 		debugConsole = debug;
 	}
 	
-	
 	private void setXmlFilePath(String filePath){
-		xmlFilePath = filePath;
-		
+		xmlFilePath = filePath;	
 	}
 	
 	private String getXmlFilePath(){
 		return xmlFilePath;
 	}
-	
 	
 	private void setXmlFile(Document file){
 		xmlFile = file;
@@ -238,11 +231,8 @@ public  class XmlParser {
 		return xmlFile;
 	}
 	
-	
 	private void openXmlFile(){
 		String filePath = getXmlFilePath();
-		
-		
 		
 		try {
 			File fXmlFile = new File(filePath);
@@ -257,11 +247,9 @@ public  class XmlParser {
 			    }
 	}	
 	
-	
 	private void getAllActors(){
 		Document doc = getXmlFile();
 		NodeList nList = doc.getElementsByTagName("Actor");
-		
 		
 		if(debugConsole){
 		System.out.println("Actors in XML-File");
@@ -269,7 +257,6 @@ public  class XmlParser {
 		System.out.println("");
 		System.out.println("Number : "+nList.getLength());
 		}
-		
 		System.out.println("");
 		
 		for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -285,7 +272,6 @@ public  class XmlParser {
 			
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				
-				
 				actor.setName(eElement.getElementsByTagName("Value").item(0).getTextContent());
 				actor.setPicturePath(eElement.getElementsByTagName("Value").item(1).getTextContent());
 				actor.setDescription(eElement.getElementsByTagName("Value").item(2).getTextContent());
@@ -300,16 +286,14 @@ public  class XmlParser {
 				actor.setFaction(eElement.getElementsByTagName("Value").item(8).getTextContent());
 				actor.setAbilities(eElement.getElementsByTagName("Value").item(9).getTextContent());
 				if(eElement.getElementsByTagName("Value").item(10).getTextContent().equalsIgnoreCase("True")){
-					actor.setFixedLocation(true);
-					}
-					else actor.setFixedLocation(false);
+                                    actor.setFixedLocation(true);
+                                }
+                                    else actor.setFixedLocation(false);
 				actor.setLocation(eElement.getElementsByTagName("Value").item(11).getTextContent());
 				actor.setActorClass(eElement.getElementsByTagName("Value").item(13).getTextContent());
 				actor.setActorSubClass(eElement.getElementsByTagName("Value").item(14).getTextContent());
 				actor.setFiles2dPath(eElement.getElementsByTagName("Value").item(15).getTextContent());
 				actor.setFiles3dPath(eElement.getElementsByTagName("Value").item(16).getTextContent()); 
-				
-				
 				
 				if(debugConsole){
 				System.out.println("Name : " + 					eElement.getElementsByTagName("Value").item(0).getTextContent());
@@ -329,19 +313,12 @@ public  class XmlParser {
 				System.out.println("Subclass : " + 				eElement.getElementsByTagName("Value").item(14).getTextContent()); 
 				System.out.println("Texture Files (2D) : " + 	eElement.getElementsByTagName("Value").item(15).getTextContent());
 				System.out.println("Texture Files (3D) : " + 	eElement.getElementsByTagName("Value").item(16).getTextContent());
-
 				System.out.println("");
 				}
 			}
-			
-			
-			listActors.add(actor);
+			listActors.set(actor.getId(),actor);
 		}
 	}
-	
-	
-
-	
 
 	private void getAllItems(){
 		Document doc = getXmlFile();
@@ -352,17 +329,13 @@ public  class XmlParser {
 		System.out.println("-------------------");
 		System.out.println("");
 		System.out.println("Number : "+nList.getLength());
-		
 		System.out.println("");
 		}
 		
 		for (int temp = 0; temp < nList.getLength(); temp++) {
 			
-			
 			Node nNode = nList.item(temp);
-			
 			Element eElement = (Element) nNode;
-			
 			boolean tmpIsRoomObject = false;
 			Item item = new Item(Integer.parseInt(eElement.getElementsByTagName("Value").item(10).getTextContent()));
 
@@ -379,8 +352,8 @@ public  class XmlParser {
 				item.setPrimaryLocation(eElement.getElementsByTagName("Value").item(3).getTextContent());
 				item.setSecondaryLocation(eElement.getElementsByTagName("Value").item(4).getTextContent());
 				item.setAssociatedWith((eElement.getElementsByTagName("Value").item(5).getTextContent()));
-				item.setCombinesWith((eElement.getElementsByTagName("Value").item(6).getTextContent()));
-				item.setContains(eElement.getElementsByTagName("Value").item(7).getTextContent());
+				item.setCombinesWith((eElement.getElementsByTagName("Value").item(6).getTextContent()), "0");
+				item.setContains(eElement.getElementsByTagName("Value").item(7).getTextContent(), "0");
 				if(eElement.getElementsByTagName("Value").item(8).getTextContent().equalsIgnoreCase("True")){
 					item.setCollectible(true);
 					}
@@ -399,13 +372,6 @@ public  class XmlParser {
 				item.setAudioFile(eElement.getElementsByTagName("Value").item(13).getTextContent());
 				item.setLocationPointer(eElement.getElementsByTagName("Value").item(14).getTextContent());
 				
-				
-			
-				
-	
-				
-				
-				
 				if(debugConsole){
 				System.out.println("Name : " + 					eElement.getElementsByTagName("Value").item(0).getTextContent());
 				System.out.println("Picture path (?) : " + 		eElement.getElementsByTagName("Value").item(1).getTextContent());
@@ -420,31 +386,23 @@ public  class XmlParser {
 				System.out.println("Id : " + 				eElement.getElementsByTagName("Value").item(10).getTextContent());
 				System.out.println(" is RoomObject : " + 				eElement.getElementsByTagName("Value").item(11).getTextContent());
 				System.out.println("roomObjectID : " + 				eElement.getElementsByTagName("Value").item(12).getTextContent());
-
-				
 				System.out.println("");
 				}
 			}	
 			
-			
 			//two lists ! roomObjects &  pickableItems
 			if(tmpIsRoomObject){
-				listRoomItems.add(item);
+                            listRoomItems.set(item.getId(),item);
 			}
-			else listPickableItems.add(item);
-			
+                        else{ 
+                            listPickableItems.set(item.getId(),item);
+                        }
+                        
+                    if (!item.isRoomObject() && item.isCollectible() && !item.isUseable() ) {
+                        listRemItems.add(item);
+                    }
 		}
-
-		
-		
-		
 	}
-	
-	
-
-	
-	
-	
 	
 	private void getAllRooms(){
 		Document doc = getXmlFile();
@@ -460,13 +418,9 @@ public  class XmlParser {
 		}
 		
 		for (int temp = 0; temp < nList.getLength(); temp++) {
-			
-			
+				
 			Node nNode = nList.item(temp);
-			
 			Element eElement = (Element) nNode;
-			
-			
 			Room room = new Room(Integer.parseInt(eElement.getElementsByTagName("Value").item(9).getTextContent()));
 			
 			if(debugConsole){
@@ -489,11 +443,9 @@ public  class XmlParser {
 				room.setGameObjectsIncluded(eElement.getElementsByTagName("Value").item(10).getTextContent());
 				room.setNpcs(eElement.getElementsByTagName("Value").item(11).getTextContent());
 				if(!(eElement.getElementsByTagName("Value").item(12).getTextContent().isEmpty())){
-				room.setLocationPointer(Integer.parseInt(eElement.getElementsByTagName("Value").item(12).getTextContent().substring(11,14)));
+                                room.setLocationPointer(Integer.parseInt(eElement.getElementsByTagName("Value").item(12).getTextContent().substring(11,14)));
 				}
 			
-				
-				
 				if(debugConsole){
 				System.out.println("Name : " + 					eElement.getElementsByTagName("Value").item(0).getTextContent());
 				System.out.println("Picture path (?) : " + 		eElement.getElementsByTagName("Value").item(1).getTextContent());
@@ -507,26 +459,18 @@ public  class XmlParser {
 				System.out.println("GameObjectsIncluded : " + 				eElement.getElementsByTagName("Value").item(9).getTextContent()); 
 				System.out.println("NPCs : " + 				eElement.getElementsByTagName("Value").item(10).getTextContent()); 
 				
-
 				System.out.println("");
 				}
-			}	
-			listRooms.add(room);
+			}
+			listRooms.set(room.getId(),room);
 		}
 	}
-
-	
-
-	
 
 	public void getAllConversations(){
 		Document doc = getXmlFile();
 		NodeList nList = doc.getElementsByTagName("Conversation");
 		
-		
-		
 		for (int temp = 0; temp < nList.getLength(); temp++) {
-			
 			
 			Node nNode = nList.item(temp);
 			Element eElement = (Element) nNode;
@@ -562,21 +506,12 @@ public  class XmlParser {
 			}
 		
 			List<Integer> dialogEntries = getAllDialogEntryIdByConversationId(Integer.parseInt(eElement.getAttribute("ID")));
-			
-			
-
+                        
 			for(int cnt = 1; cnt < dialogEntries.size(); cnt++){
 				conv.addDialogEntry(getDialogEntryById(dialogEntries.get(cnt),Integer.parseInt(eElement.getAttribute("ID"))));
-			}
-		
-			
+			}			
 			listConversations.add(conv);
-		
 		}
-		
-		
-		
-		
 	}
 
 	public List<Integer> getAllDialogEntryIdByConversationId(int conversationId){
@@ -593,21 +528,16 @@ public  class XmlParser {
 			
 			Node nNode = nList.item(temp);
 			Element eElement = (Element) nNode;
-			
-			
-			
+
 			if(Integer.toString(conversationId).equalsIgnoreCase(eElement.getAttribute("ConversationID"))) {
 			   dialogEntries.add(Integer.parseInt(eElement.getAttribute("ID")));
 			}
-		
 		}
-		
 		return dialogEntries;
 	}
 
 	public DialogEntry getDialogEntryById (int dialogEntryId, int conversationId){
 		
-
 		Document doc = getXmlFile();
 		NodeList nList = doc.getElementsByTagName("DialogEntry");
 		
@@ -622,15 +552,10 @@ public  class XmlParser {
 			Node nNode = nList.item(temp);
 			Element eElement = (Element) nNode;
 			
-			
-			
-			
-			
 			if(Integer.toString(conversationId).equalsIgnoreCase(eElement.getAttribute("ConversationID"))
 				&& Integer.toString(dialogEntryId).equalsIgnoreCase(eElement.getAttribute("ID"))
 				&& eElement.getAttribute("IsGroup").equalsIgnoreCase("false")
 				){
-				
 				
 					dialogEntry = new DialogEntry(Integer.parseInt(eElement.getAttribute("ID")));
 					dialogEntry.setGroup(false);	
@@ -689,7 +614,6 @@ public  class XmlParser {
 				dialogEntry.setActor(eElement.getElementsByTagName("Value").item(3).getTextContent());
 				dialogEntry.setConversant(eElement.getElementsByTagName("Value").item(4).getTextContent());
 				
-				
 				if(debugConsole){
 				System.out.println("IS GROUP !");
 				System.out.println("Title : " + 					eElement.getElementsByTagName("Value").item(0).getTextContent());
@@ -701,19 +625,10 @@ public  class XmlParser {
 				NodeList lList = eElement.getElementsByTagName("Link");
 				dialogEntry.setLinkedDialogEntries(getInformationAboutLinkedDialogs(lList, true));
 				return dialogEntry;
-			}
-			
-			
+			}	
 		}
-		
 		return dialogEntry;
-		
 	}
-	
-	
-	
-	
-	
 	
 	private List<Integer> getInformationAboutLinkedDialogs(NodeList lList, boolean isGroup){
 		List<Integer> listLinkedDialogEntries = new ArrayList<Integer>();
@@ -723,7 +638,6 @@ public  class XmlParser {
 			System.out.println("Linked to the Dialogs :");
 			System.out.println("----------");
 		}
-		
 		
 		for (int linkCnt = 0; linkCnt < lList.getLength(); linkCnt++){
 			Node lNode = lList.item(linkCnt);
@@ -754,12 +668,10 @@ public  class XmlParser {
 		return listLinkedDialogEntries;
 	}
 	
-	
 	public void getAllDialogEntriesByConversationID(int conversationId){
 		Document doc = getXmlFile();
 		NodeList nList = doc.getElementsByTagName("DialogEntry");
 		List<Integer> dialogEntryIds = new ArrayList<Integer>(); 
-		
 		
 		for (int temp = 0; temp < nList.getLength(); temp++) {
 			
@@ -770,14 +682,6 @@ public  class XmlParser {
 				dialogEntryIds.add(Integer.parseInt(eElement.getAttribute("ID")));
 				System.out.println("ID"+eElement.getAttribute("ID"));
 			}
-					
-			
 		}
-		
 	}
-	
-	
-	
-	
-
 }

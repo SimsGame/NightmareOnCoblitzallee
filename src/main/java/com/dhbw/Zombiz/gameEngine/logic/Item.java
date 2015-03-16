@@ -12,23 +12,19 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  *Project: Zombiz
- *Package: com.dhbw.zombiz.gameEngine.logic
- *
- *Contributors:
- * -Christoph Schabert
- * -Jan Brodhaecker
-
- */
-
-
-
+ *Package: com.dhbw.zombiz
+ ********************************************************************************/
 package com.dhbw.Zombiz.gameEngine.logic;
 
 
 /**
- * only for testing !
+ * Class for Items in the Game. 
  * 
- * TODO:
+ * Differences between roomObjects (can not picked up) and normal items (which can be picked up).
+ * 
+ * Gets stuff from the XML parser, which creates these objects for the game
+ * 
+ * @author Jan Brodhaecker 
  */
 public class Item extends AGameElement {
 
@@ -188,8 +184,12 @@ public class Item extends AGameElement {
 
 
 
-	public void setCombinesWith(String combinesWith) {
-		this.combinesWith = combinesWith;
+	public void setCombinesWith(String combinesWith, String defaultValue) {
+             if(!combinesWith.isEmpty()){
+                    this.combinesWith = combinesWith;
+                }else{
+                    this.combinesWith = defaultValue;
+                }
 	}
 
 
@@ -200,8 +200,12 @@ public class Item extends AGameElement {
 
 
 
-	public void setContains(String contains) {
-		this.contains = contains;
+	public void setContains(String contains, String defaultValue) {
+                if(!contains.isEmpty()){
+                    this.contains = contains;
+                }else{
+                    this.contains = defaultValue;
+                }
 	}
 
 
