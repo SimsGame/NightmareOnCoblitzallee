@@ -218,7 +218,7 @@ public class Menu {
     }
 
     public static void closeGame() {
-        SoundPlayer.soundClick();
+        SoundPlayer.soundClick(false);
         System.exit(0);
     }
 
@@ -257,7 +257,7 @@ public class Menu {
                 deleteFrame(frame);
                 drawMainMenue(frame);
                 frame.repaint();
-                SoundPlayer.soundClick();
+                SoundPlayer.soundClick(false);
 
             }
         });
@@ -277,7 +277,7 @@ public class Menu {
 
     public void startNewGame(final JFrame frame) {
         frame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        SoundPlayer.soundClick();
+        SoundPlayer.soundClick(false);
         final Runtime r = new Runtime(true, frame);
         CheatThread t = new CheatThread(r);
         Thread test = new Thread(t);
@@ -292,7 +292,7 @@ public class Menu {
     }
 
     public void loadGame(final JFrame frame) {
-        SoundPlayer.soundClick();
+        SoundPlayer.soundClick(false);
         final Runtime r = new Runtime(true, frame);
 
         if (checkIfGameIsLoadable()) {
@@ -301,8 +301,8 @@ public class Menu {
     }
 
     public void showCredits(final JFrame frame) {
-        SoundPlayer.soundClick();
-
+        SoundPlayer.soundClick(false);
+        
         Credits c = new Credits(frame);
     }
 
@@ -313,7 +313,7 @@ public class Menu {
                     deleteFrame(frame);
                     drawMainMenue(frame);
                     frame.repaint();
-                    SoundPlayer.soundClick();
+                    SoundPlayer.soundClick(false);
 
                 }
 

@@ -60,7 +60,7 @@ public class Video{
 	public Video(final JFrame frame){
 	
 		
-		SoundPlayer.stopSound();
+		SoundPlayer.stopBackgroundSound();
 		NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), System.getProperty("user.dir") + "\\lib\\");
 		System.out.println("PATH !!!! :"+ System.getProperty("user.dir") + "\\lib\\");
 		

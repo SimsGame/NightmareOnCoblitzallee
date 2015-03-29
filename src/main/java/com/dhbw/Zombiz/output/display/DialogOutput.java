@@ -169,7 +169,7 @@ public class DialogOutput {
     //Constructor ! 
     public DialogOutput(JFrame frame, Conversation c, BufferedImage backgroundImage, List<Actor> actors, int rootRoomId, Runtime runtime) {
 
-        SoundPlayer.soundStartConv();
+        SoundPlayer.soundStartConv(runtime.br.muted);
         frame.getContentPane().removeAll();
 
         setMaxDeSize(c.getDialogEntries().size());
@@ -333,7 +333,7 @@ public class DialogOutput {
 
                 if (type.equalsIgnoreCase("nextDialogEntry")) {
                     if (getNextDeId() <= getMaxDeSize() - 1) {
-                        SoundPlayer.soundNextDialog();
+                        SoundPlayer.soundNextDialog(innerRuntime.br.muted);
                         frame.getContentPane().removeAll();
                         JTextArea dialog = getDialogEntry(frame, getConv(), actors, false, innerRuntime);
                         frame.add(dialog);
@@ -398,7 +398,7 @@ public class DialogOutput {
                 // Char Space 32, Char Enter 10
                 if (e.getKeyCode() == 10 || e.getKeyCode() == 32) {
                     if (getNextDeId() <= getMaxDeSize() - 1) {
-                        SoundPlayer.soundNextDialog();
+                        SoundPlayer.soundNextDialog(innerRuntime.br.muted);
                         frame.getContentPane().removeAll();
                         JTextArea dialog = getDialogEntry(frame, getConv(), actors, false, innerRuntime);
                         frame.add(dialog);

@@ -332,7 +332,7 @@ public class Runtime implements Serializable {
             // Origins: i=Inspect; u=Use; no Origin checked=draw;
             if (type == 'o') {
                 if (origin == 'u' && (id == 1 || (id >= 15 && id <= 23) || id == 25 || id == 26 || id == 27 || id == 33)) {
-                    SoundPlayer.soundUseDoor();
+                    SoundPlayer.soundUseDoor(br.muted);
                 }
                 if (id == 8 && dontDraw) {
                     return false;
@@ -1020,6 +1020,7 @@ public class Runtime implements Serializable {
             save.writeObject(chosenRoom);
             save.writeObject(toggleFlag);
             save.writeObject(currentChapter);
+            save.writeObject(br.muted);
             // Close the file.
             save.close();
         } catch (Exception exc) {
@@ -1060,6 +1061,7 @@ public class Runtime implements Serializable {
             chosenRoom = (Integer) save.readObject();
             toggleFlag = (Boolean) save.readObject();
             currentChapter = (Integer) save.readObject();
+            br.muted = (Boolean) save.readObject();
 
             // Close the file.
             save.close();

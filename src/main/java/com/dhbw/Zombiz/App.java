@@ -86,7 +86,7 @@ public class App
     	
     	
     	
-    	SoundPlayer.createSound();
+    	SoundPlayer.createBackgroundSound();
     	
     	frame.setSize(800,600);
     	frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

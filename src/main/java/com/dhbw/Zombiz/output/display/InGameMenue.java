@@ -108,7 +108,7 @@ public class InGameMenue {
             public void mouseClicked(MouseEvent me) {
 
                 if (type.equalsIgnoreCase("continue")) {
-                    SoundPlayer.soundClick();
+                    SoundPlayer.soundClick(innerRuntime.br.muted);
                     innerRuntime.initNewRoom(false, getRootRoomId(), frame);
                     //BuildRoom r = new BuildRoom(getRootRoomId(), frame);
                 }
@@ -116,7 +116,7 @@ public class InGameMenue {
                     loadGame(frame, innerRuntime);
                 }
                 if (type.equalsIgnoreCase("saveGame")) {
-                    SoundPlayer.soundClick();
+                    SoundPlayer.soundClick(innerRuntime.br.muted);
                     innerRuntime.saveGame();
                     showSuccessSavingGame(frame, innerRuntime);
                 }
@@ -153,7 +153,7 @@ public class InGameMenue {
         clickLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent me) {
-                SoundPlayer.soundClick();
+                SoundPlayer.soundClick(innerRuntime.br.muted);
                 innerRuntime.initNewRoom(false, getRootRoomId(), frame);
                 //BuildRoom r = new BuildRoom(getRootRoomId(), frame);
             }
@@ -172,7 +172,7 @@ public class InGameMenue {
         KeyAdapter keyListener = new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == 10) {
-                    SoundPlayer.soundClick();
+                    SoundPlayer.soundClick(innerRuntime.br.muted);
                     innerRuntime.initNewRoom(false, getRootRoomId(), frame);
                     //BuildRoom r = new BuildRoom(getRootRoomId(), frame);
                 }
@@ -207,7 +207,7 @@ public class InGameMenue {
     public void loadGame(JFrame frame, Runtime runtime) {
         File f = new File("src/main/resources/savegame.sav");
         if (f.exists()) {
-            SoundPlayer.soundClick();
+            SoundPlayer.soundClick(runtime.br.muted);
             runtime.loadGame();
         } else {
             showWarning(frame, runtime);
@@ -238,7 +238,7 @@ public class InGameMenue {
                 innerRuntime.initNewRoom(false, getRootRoomId(), frame);
                 //BuildRoom r = new BuildRoom(getRootRoomId(), frame);
                 frame.repaint();
-                SoundPlayer.soundClick();
+                SoundPlayer.soundClick(innerRuntime.br.muted);
 
             }
         });

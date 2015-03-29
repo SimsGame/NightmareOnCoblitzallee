@@ -74,6 +74,7 @@ public class BuildRoom {
     int inGameMenueIsOpenFlag = 0;
     int helpIsOpenFlag = 0;
     boolean dialogOutputOpen = false;
+    public boolean muted = false;
     
     static int cnt = 0;
     Item roomObj;
@@ -104,6 +105,10 @@ public class BuildRoom {
             throw new IllegalArgumentException("No parser found for room: " + roomId);
         }
 
+        if(muted){
+            SoundPlayer.stopBackgroundSound();
+        }
+        
         setParser(p);
         if(p.getRoomById(roomId) == null){
             return;
@@ -278,7 +283,7 @@ public class BuildRoom {
                 }
 
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE && inventoryIsOpenFlag == 1) {
-                    SoundPlayer.soundClick();
+                    SoundPlayer.soundClick(muted);
                     refreshFrame(frame);
                     inventoryIsOpenFlag = 0;
                 }
@@ -290,7 +295,7 @@ public class BuildRoom {
 
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE && menueIsOpenFlag == 1) {
                     refreshFrame(frame);
-                    SoundPlayer.soundClick();
+                    SoundPlayer.soundClick(muted);
                     System.out.println("here there");
                     menueIsOpenFlag = 0;
                 }
@@ -305,6 +310,16 @@ public class BuildRoom {
                             helpIsOpenFlag = 0;
                         }
                     }
+                }
+                
+                if (e.getKeyCode() == KeyEvent.VK_M) {
+                   if(muted == false){
+                       SoundPlayer.stopBackgroundSound();
+                       muted = true;
+                   }else{
+                       SoundPlayer.startBackgroundSound();
+                       muted = false;
+                   }
                 }
             }
         };
@@ -462,14 +477,14 @@ public class BuildRoom {
                     }
                     if (type.equalsIgnoreCase("inventory:close")) {
                         System.out.println("You closed the inventory !!!");
-                        SoundPlayer.soundClick();
+                        SoundPlayer.soundClick(BuildRoom.this.muted);
                         refreshFrame(frame);
                         inventoryIsOpenFlag = 0;
                         BuildRoom.this.inventory.itemsFocussedInInventory = 0;
                     }
                     if (type.equalsIgnoreCase("inventory:next")) {
                         System.out.println("You turned the page!!!");
-                        SoundPlayer.soundClick();
+                        SoundPlayer.soundClick(BuildRoom.this.muted);
                         side = 15;
                         refreshFrame(frame);
                         BuildRoom.this.inventory.itemsFocussedInInventory = 0;
@@ -479,7 +494,7 @@ public class BuildRoom {
                     }
                     if (type.equalsIgnoreCase("inventory:back")) {
                         System.out.println("You turned the page!!!");
-                        SoundPlayer.soundClick();
+                        SoundPlayer.soundClick(BuildRoom.this.muted);
                         side = 0;
                         refreshFrame(frame);
                         BuildRoom.this.inventory.itemsFocussedInInventory = 0;
@@ -488,7 +503,7 @@ public class BuildRoom {
 
                     }
                     if (type.equalsIgnoreCase("item")) {
-                        SoundPlayer.soundClick();
+                        SoundPlayer.soundClick(BuildRoom.this.muted);
                         if (menueIsOpenFlag == 1) {
                             refreshFrame(frame);
                             frame.repaint();
@@ -511,7 +526,7 @@ public class BuildRoom {
 
                     if (type.equalsIgnoreCase("leaveRoom")) {
                         System.out.println("You want to leave ... ? :(");
-                        SoundPlayer.soundUseDoor();
+                        SoundPlayer.soundUseDoor(BuildRoom.this.muted);
                         deleteFrame(frame);
 			// Runtime.changeRoom(getRoom().getLocationPointer(),
                         // frame);
@@ -550,7 +565,7 @@ public class BuildRoom {
                     }
 
                     if (type.equalsIgnoreCase("inventory:click")) {
-                        SoundPlayer.soundClick();
+                        SoundPlayer.soundClick(BuildRoom.this.muted);
                         Item itemInInventory = null;
                         itemInInventory = BuildRoom.this.inventory.getItemById(BuildRoom.this.runtime.getInventory(), itemId);
                         if (isWantToCombineRoomObjWithItem()) {
@@ -562,7 +577,7 @@ public class BuildRoom {
                 } // check if MenuIsOpenFlag
                 // Options for Items
                 if (type.equalsIgnoreCase("pickup:itemmenue")) {
-                    SoundPlayer.soundClick();
+                    SoundPlayer.soundClick(BuildRoom.this.muted);
                     // Once the key is picked up, the game will change the state
                     BuildRoom.this.runtime.checkStep(itemId, 'i', 'p');
                     BuildRoom.this.runtime.addItemToInventory(BuildRoom.this.inventory.getItemById(getItems(), itemId));
@@ -578,7 +593,7 @@ public class BuildRoom {
                     menueIsOpenFlag = 0;
                 }
                 if (type.equalsIgnoreCase("inspect:itemmenue")) {
-                    SoundPlayer.soundClick();
+                    SoundPlayer.soundClick(BuildRoom.this.muted);
                     int autoItem = BuildRoom.this.runtime.checkAutoItem(itemId, 'i', 'i');
                     menueIsOpenFlag = 0;
                     refreshFrame(frame);
@@ -591,7 +606,7 @@ public class BuildRoom {
                 }
                 if (type.equalsIgnoreCase("leave:item")) {
                     refreshFrame(frame);
-                    SoundPlayer.soundClick();
+                    SoundPlayer.soundClick(BuildRoom.this.muted);
                     menueIsOpenFlag = 0;
                 }
 
@@ -599,7 +614,7 @@ public class BuildRoom {
                 if (type.equalsIgnoreCase("use:RoomObjMenue")) {
                     // checks whether a roomobject may be used.
                     Item item = getRoomObjectById(itemId);
-                    SoundPlayer.soundClick();
+                    SoundPlayer.soundClick(BuildRoom.this.muted);
                     String aimLoc = item.getLocationPointer();
                     aimLoc = aimLoc.substring(11, 14);
                     int aimLocId = Integer.parseInt(aimLoc);
@@ -628,7 +643,7 @@ public class BuildRoom {
                 }
 
                 if (type.equalsIgnoreCase("inspect:RoomObjMenue")) {
-                    SoundPlayer.soundClick();
+                    SoundPlayer.soundClick(BuildRoom.this.muted);
                     int autoItem = BuildRoom.this.runtime.checkAutoItem(itemId, 'r', 'i');
                     menueIsOpenFlag = 0;
                     refreshFrame(frame);
@@ -642,7 +657,7 @@ public class BuildRoom {
                 }
 
                 if (type.equalsIgnoreCase("item:RoomObjMenue")) {
-                    SoundPlayer.soundClick();
+                    SoundPlayer.soundClick(BuildRoom.this.muted);
                     Item roomObj = getRoomObjectById(itemId);
                     setRoomObj(roomObj);
                     BuildRoom.this.inventory.drawInventory();
@@ -789,7 +804,7 @@ public class BuildRoom {
 
     // draw InGameMenue 
     public void drawInGameMenue(JFrame frame) {
-        SoundPlayer.soundClick();
+        SoundPlayer.soundClick(BuildRoom.this.muted);
         deleteFrame(frame);
         JLabel label = setBackgroundImage(frame);
 

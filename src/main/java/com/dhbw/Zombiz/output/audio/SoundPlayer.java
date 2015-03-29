@@ -23,51 +23,54 @@ package com.dhbw.Zombiz.output.audio;
 public class SoundPlayer {
 	
 	public static Thread ts;
+        private static Sound backgroundSound; 
 	
-	public static void soundUseDoor(){
+	public static void soundUseDoor(boolean muted){
+                if(muted) return;
 		Sound doorSound = new Sound("door");
 		Thread tdoorSound = new Thread(doorSound,"doorSound"); 
 		tdoorSound.start();
 	}
 	
-	public static void soundNextDialog(){
+	public static void soundNextDialog(boolean muted){
+            if(muted) return;
 		Sound con_flip = new Sound("con-flip");
 		Thread tcon_flip = new Thread(con_flip,"con-flip");
 		tcon_flip.start();
 	}
 	
-	public static void soundStartConv(){
+	public static void soundStartConv(boolean muted){
+            if(muted) return;
 		Sound con_start = new Sound("con-start");
 		Thread tcon_start = new Thread(con_start,"con-start");
 		tcon_start.start();
 	}
 	
-	
-	public static void soundItemPickUp(){
+	public static void soundItemPickUp(boolean muted){
+            if(muted) return;
 		Sound itempickup = new Sound("itempickup");
 		Thread titempickup = new Thread(itempickup,"itempickup");
 		titempickup.start();
 	}
 	
-	public static void soundClick(){
+	public static void soundClick(boolean muted){
+            if(muted) return;
 		Sound clickSound = new Sound("click1");
 		Thread tclickSound = new Thread(clickSound,"clickSound");
 		tclickSound.start();
 	}
 	
-	
-	
-	public static void createSound(){
-		s = new Sound("Background");
-		s.setRepeat(true);
-		ts = new Thread(s,"Background Sound");
+	public static void createBackgroundSound(){
+		backgroundSound = new Sound("Background");
+		backgroundSound.setRepeat(true);
+		ts = new Thread(backgroundSound,"Background Sound");
 	}
 	
-	private static Sound s; 
-	
-	public static void stopSound(){
-		s.stop();
-		
+	public static void stopBackgroundSound(){
+		backgroundSound.stop();
 	}
-
+        
+        public static void startBackgroundSound(){
+                ts.start();
+	}
 }

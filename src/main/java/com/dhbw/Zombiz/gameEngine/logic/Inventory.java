@@ -244,7 +244,7 @@ public class Inventory {
     
     // draw Inventory
     public void drawInventory() {
-        SoundPlayer.soundClick();
+        SoundPlayer.soundClick(runtime.br.muted);
         deleteFrame(frame);
         JLabel label = runtime.br.setBackgroundImage(frame);
 

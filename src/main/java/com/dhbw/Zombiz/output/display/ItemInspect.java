@@ -76,7 +76,7 @@ public class ItemInspect {
     }
 
     public ItemInspect(JFrame frame, BufferedImage backgroundImage, Item item, int rootRoomId, Runtime runtime) {
-        SoundPlayer.soundStartConv();
+        SoundPlayer.soundStartConv(runtime.br.muted);
 
         setRooRoomId(rootRoomId);
 
@@ -161,7 +161,7 @@ public class ItemInspect {
             public void mouseClicked(MouseEvent me) {
 
                 if (type.equalsIgnoreCase("close:InspectItem")) {
-                    SoundPlayer.soundNextDialog();
+                    SoundPlayer.soundNextDialog(innerRuntime.br.muted);
                     innerRuntime.initNewRoom(false, getRooRoomId(), frame);
                     //BuildRoom r = new BuildRoom(getRooRoomId(), frame);
                 }
