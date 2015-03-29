@@ -31,42 +31,42 @@ import javax.swing.JPanel;
  */
 public class Help{
     
-    public static String helptext;
-    public static int room;
-    public static BufferedImage bg;
+    private static BufferedImage bg;
     
-    public  Help(final JFrame frame, int roomId, BufferedImage background, Runtime runtime){
+    //Class can not be instanciated
+    private  Help(){ }
+    
+    public static void showHelpText(final JFrame frame, BufferedImage background, Runtime runtime){
+        
+        String helptext = "";
+        
         if(runtime.currentChapter == 1){    
         	switch(runtime.getGameState()){
             
-                case 0: helptext = "Ich brauche den Schlüssel um die Tür abzuschließen..."; break;
-                case 1: helptext = "Ich sollte die Tür abzuschließen..."; break;
+                case 0: helptext = "Ich brauche den Schl?ssel um die T?r abzuschließen..."; break;
+                case 1: helptext = "Ich sollte die T?r abzuschließen..."; break;
                 case 2: helptext = "Ich muss in Raum 2..."; break;
-                case 3: helptext = "Prof. Meier braucht die Büroklammer aus Raum 1..."; break;
-                case 4: helptext = "Ich sollte Prof. Meier die Büroklammer bringen..."; break;
-                case 5: helptext = "Ich sollte Prof. Meier die Büroklammer bringen..."; break;
+                case 3: helptext = "Prof. Meier braucht die B?roklammer aus Raum 1..."; break;
+                case 4: helptext = "Ich sollte Prof. Meier die B?roklammer bringen..."; break;
+                case 5: helptext = "Ich sollte Prof. Meier die B?roklammer bringen..."; break;
                 case 6: helptext = "Nun brauche ich noch den Zettel aus dem Sicherungskasten in Raum 3 und den vom Beamer..."; break;
                 case 7: helptext = "Jetzt noch den letzten Zettel vom Projektor in Raum 1, dann habe ich alle..."; break;
                 case 8: helptext = "Auf zum SG... Treppenhaus halt und nach oben. Danach den Aufzug reparieren"; break;
                 case 9: helptext = "Schnell in den Aufzug und weiter nach oben zur Kuchenparty..."; break;
-                case 14: helptext = "Ich muss aber die Seilwinde in Raum 2 in den 2. Stock gelangen..."; break;
+                case 14: helptext = "Ich muss ?ber die Seilwinde in Raum 2 in den 2. Stock gelangen..."; break;
                 default: helptext = "Ich sollte mir die Räume noch einmal genauer anschen...";
             }
         }
-        room = roomId;
         bg = background;
-        showHelpText("", frame);
+        drawHelpPanel(helptext, frame);
     }
     
-    public static void showHelpText(String helpToDisplay, final JFrame frame){
-        if(!helpToDisplay.isEmpty()){
-            helptext = helpToDisplay;
-        }
+    private static void drawHelpPanel(String helpToDisplay, final JFrame frame){
         JPanel panel = new JPanel();
         panel.setBackground(Color.black);
         panel.setBounds(10, 500, 780, 50);
         frame.getContentPane().removeAll();
-        JLabel helpLabel = new JLabel(helptext);
+        JLabel helpLabel = new JLabel(helpToDisplay);
         helpLabel.setForeground(Color.white);
         panel.add(helpLabel);
         frame.add(panel);

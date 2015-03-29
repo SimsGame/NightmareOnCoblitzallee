@@ -265,8 +265,9 @@ public class BuildRoom {
     // add keylisteners to the game for different functions
     public void addKeyListeners(final JFrame frame) {
         KeyAdapter keyListener = new KeyAdapter() {
+            @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == 73) {
+                if (e.getKeyCode() == KeyEvent.VK_I) {
                     if (inventoryIsOpenFlag == 0) {
                         BuildRoom.this.inventory.drawInventory();
                         inventoryIsOpenFlag = 1;
@@ -276,27 +277,27 @@ public class BuildRoom {
                     }
                 }
 
-                if (e.getKeyCode() == 27 && inventoryIsOpenFlag == 1) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE && inventoryIsOpenFlag == 1) {
                     SoundPlayer.soundClick();
                     refreshFrame(frame);
                     inventoryIsOpenFlag = 0;
                 }
 
-                if (e.getKeyCode() == 27 && inventoryIsOpenFlag == 0 && menueIsOpenFlag == 0 && !dialogOutputOpen) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE && inventoryIsOpenFlag == 0 && menueIsOpenFlag == 0 && !dialogOutputOpen) {
                     drawInGameMenue(frame);
                     System.out.println("there here");
                 }
 
-                if (e.getKeyCode() == 27 && menueIsOpenFlag == 1) {
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE && menueIsOpenFlag == 1) {
                     refreshFrame(frame);
                     SoundPlayer.soundClick();
                     System.out.println("here there");
                     menueIsOpenFlag = 0;
                 }
-
-                if (e.getKeyCode() == 72) {
+                  
+                if (e.getKeyCode() == KeyEvent.VK_H) {
                     if (helpIsOpenFlag == 0 && !dialogOutputOpen && menueIsOpenFlag == 0 && inGameMenueIsOpenFlag == 0 && inventoryIsOpenFlag == 0) {
-                        new Help(frame, roomId, getBackgroundImage(), BuildRoom.this.runtime);
+                        Help.showHelpText(frame, getBackgroundImage(), BuildRoom.this.runtime);
                         helpIsOpenFlag = 1;
                     } else {
                         if (helpIsOpenFlag == 1) {
